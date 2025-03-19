@@ -1,6 +1,11 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+const { Pool } = require("pg");
+const jwt = require("jsonwebtoken");
+
 const app = express();
 const port = 3000;
 
@@ -10,9 +15,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsdoc = require("swagger-jsdoc");
-
+// Swagger configuration
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -27,7 +30,7 @@ const options = {
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-const { Pool } = require("pg");
+// PostgreSQL connection
 const pool = new Pool({
   user: "yourusername",
   host: "localhost",
@@ -44,8 +47,7 @@ pool.connect((err) => {
   }
 });
 
-const jwt = require("jsonwebtoken");
-
+// JWT Authentication
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
   const token = jwt.sign({ username }, "your_jwt_secret");
@@ -67,6 +69,7 @@ app.get("/protected", authenticateToken, (req, res) => {
   res.send("This is a protected route");
 });
 
+// File upload with Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -84,16 +87,11 @@ const fileFilter = (req, file, cb) => {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(
-      "Error: File upload only supports the following filetypes - " + filetypes
-    );
+    cb("Error: File upload only supports CSV and XLSX formats.");
   }
 };
 
-const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-});
+const upload = multer({ storage, fileFilter });
 
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
