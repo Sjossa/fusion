@@ -1,0 +1,75 @@
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  width: 10vw;
+  height: 100vh;
+  background:
+    repeating-radial-gradient(circle at right center,
+      transparent 0px,
+      transparent 5px,
+      #0f3d0f 1px,
+      transparent 100px),
+    #0a0a0a;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.sidebar ul {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.sidebar li {
+  display: inline-block;
+  background-color: #04C260;
+  color: #000000;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  padding: 15px;
+  font-size: 2.5vh;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.sidebar li:hover {
+  background-color: #eef0f1;
+}
+
+/* Contenu principal */
+main {
+  background: linear-gradient(180deg, #faf8f3, #f2efe5);
+  margin-left: 10vw;
+  width: calc(100% - 10vw);
+  min-height: 100vh;
+  text-align: center;
+}
+
+/* Page Login */
+.Login {
+  background-color: #f5f7f8;
+}
+
+.first_ligne {
+  justify-content: space-between;
+  margin: 0 10px;
+}
+
+/* Menu de la page */
+.menu_page {
+  width: 40vw;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow:
+    inset 15px 15px 20px rgba(22, 21, 21, 0.3),
+    inset -15px -15px 20px rgba(22, 21, 21, 0.3);
+  text-align: center;
+  margin: auto;
+  margin-top: 10vh;
+  gap: 12px;
+}
+
+/* Texte */
+.Name_fichier {
+  font-size: 3vh;
+}

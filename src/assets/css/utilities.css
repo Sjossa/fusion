@@ -1,0 +1,24 @@
+
+
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-rows {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex{
+  display: flex;
+}
+/* Visibilité */
+.hidden {
+  display: none;
+}
+
+.nav-link{
+  color: inherit;
+}
