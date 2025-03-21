@@ -1,95 +1,68 @@
 import React, { useState, useRef, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Headers from "./components/Little-components/header";
-import FileUpload from "./components/FileUpload";
-import FileMapping from "./components/FileMapping";
-import FileExport from "./components/FileExport";
-import EditableTable from "./components/EditableTable";
-import { FileRow } from "./types/FileTypes";
 import "./assets/css/main.css";
+import Donnée from "./components/Lecture";
 
-// 🚀 Chargement dynamique des pages
+// Chargement paresseux des composants
 const Home = lazy(() => import("./components/Home"));
-const Connexion = lazy(() => import("./components/Connexion"));
 const LazyToastContainer = lazy(() =>
   import("react-toastify").then((module) => ({
     default: module.ToastContainer,
   }))
 );
 
-interface TableConfig {
-  name: string;
-  columns: string[];
-}
-
 const App: React.FC = () => {
-  // Gestion des fichiers sélectionnés
+  // Gestion du fichier sélectionné
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Gestion des fichiers uploadés et mapping
-  const [uploadedData, setUploadedData] = useState<FileRow[]>([]);
-  const [activeConfig, setActiveConfig] = useState<TableConfig | null>(null);
-
+  // Met à jour les champs de saisie de fichiers
   const updateFileInputs = (file: File | null) => {
     fileInputRefs.current.forEach((input) => {
       if (input && file) {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
-        input.files = dataTransfer.files;
+        input.files = dataTransfer.files; // Met à jour les fichiers dans chaque input
       } else if (input) {
-        input.value = "";
+        input.value = ""; // Si aucun fichier, on vide l'input
       }
     });
   };
 
-  const handleMappingChange = (newMapping: { tableConfig?: TableConfig }) => {
-    if (newMapping.tableConfig) {
-      setActiveConfig(newMapping.tableConfig);
-    }
-  };
-
-  const getMappingObject = (config: TableConfig | null): Record<string, string> => {
-    if (!config) return {};
-    return config.columns.reduce((acc, column) => {
-      acc[column] = column;
-      return acc;
-    }, {} as Record<string, string>);
-  };
-
   return (
     <Router>
-      {/* ToastContainer conditionnel */}
+      {/* ToastContainer affiché conditionnellement si un fichier est sélectionné */}
       {selectedFile && (
         <Suspense fallback={null}>
           <LazyToastContainer />
         </Suspense>
       )}
 
-      {/* Sidebar (Header) visible sur toutes les pages */}
+      {/* En-tête visible sur toutes les pages */}
       <Headers
         setSelectedFile={(file) => {
-          setSelectedFile(file);
-          updateFileInputs(file);
+          setSelectedFile(file); // Met à jour le fichier sélectionné
+          updateFileInputs(file); // Met à jour les inputs de fichier
         }}
       />
 
-      {/* Gestion des routes avec chargement dynamique */}
+      {/* Routes avec des imports dynamiques */}
       <Suspense fallback={<div>Chargement...</div>}>
         <Routes>
           <Route
             path="/"
-            element={<Home selectedFile={selectedFile} fileInputRefs={fileInputRefs} />}
+            element={
+              <Home selectedFile={selectedFile} fileInputRefs={fileInputRefs} />
+            }
           />
-          <Route path="/connexion" element={<Connexion />} />
+        </Routes>
+        <Routes>
+          <Route path="/a" element={<Donnée />} />
         </Routes>
       </Suspense>
+    </Router>
+  );
+};
 
-      {/* Composants liés à la gestion des fichiers */}
-      <div className="App">
-        <FileUpload onFileLoaded={setUploadedData} />
-        {uploadedData.length > 0 && (
-          <>
-            <FileMapping data={uploadedData} onMappingChange={handleMappingChange} />
-            <EditableTable data={uploadedData} onDataChange={setUploadedData} columns={activeConfig?.columns || []} />
-            <FileExport data={uploadedData} mapping={getMappingObject(activeConfig)} />
+export default App;

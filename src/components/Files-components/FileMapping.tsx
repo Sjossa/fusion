@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileRow } from '../types/FileTypes';
+import { FileRow } from '../../types/FileTypes';
 
 interface FileMappingProps {
     data: FileRow[];
@@ -98,7 +98,7 @@ const FileMapping: React.FC<FileMappingProps> = ({ data, onMappingChange }) => {
                 </div>
             )}
 
-            <div className="data-preview">
+            
                 <div className="table-container">
                     <table>
                         <thead>
@@ -125,7 +125,7 @@ const FileMapping: React.FC<FileMappingProps> = ({ data, onMappingChange }) => {
                         </tbody>
                     </table>
                 </div>
-            </div>
+
 
             <div className="mapping-actions">
                 <button

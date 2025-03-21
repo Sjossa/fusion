@@ -25,3 +25,5 @@ dist-ssr
 
 .env
 schema.prisma
+package-lock.json
+

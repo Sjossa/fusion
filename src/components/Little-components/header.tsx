@@ -34,9 +34,7 @@ const Headers: React.FC<HeadersProps> = ({ setSelectedFile }) => {
   return (
     <header className="sidebar flex-column">
       {/* Message d'erreur lisible par les lecteurs d'écran */}
-      {error && (
-        <ErrorMessage message={error} role="alert" aria-live="assertive" />
-      )}
+      {error && <ErrorMessage message={error} aria-live="assertive" />}
 
       <nav>
         <ul>
@@ -58,12 +56,17 @@ const Headers: React.FC<HeadersProps> = ({ setSelectedFile }) => {
             >
               📂 Ajouter un fichier
             </label>
-
           </li>
 
           <li>
             <Link to="/Historique" className="nav-link" tabIndex={0}>
               📜 Historique
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/a" className="nav-link" tabIndex={0}>
+              📜 a
             </Link>
           </li>
 
